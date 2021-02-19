@@ -14,11 +14,17 @@
             <nav>
                 <a href="/">Home</a>
                 <div>
-                    <a href="/new_store">New Store</a>
-                    <a href="/new_item">New Item</a>
+                    {% if current_user.is_autehnticated %}
+                        <a href="/new_store">New Store</a>
+                        <a href="/new_item">New Item</a>
+                    {% else %}
+                        <a href="/login">Log In</a>
+                        <a href="/signup">Sign Up</a>
                 </div>
             </nav>
-            {% block content %}{% endblock %}
+                    {% endif %}
+            {% block content %}
+            {% endblock %}
         </div>
     </body>
 </html>
