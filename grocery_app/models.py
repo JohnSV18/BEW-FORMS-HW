@@ -1,7 +1,9 @@
 from sqlalchemy_utils import URLType
-
+from flask_login import UserMixin
 from grocery_app import db
 from grocery_app.utils import FormEnum
+from flask_bcrypt import Bcrypt
+
 
 class ItemCategory(FormEnum):
     """Categories of grocery items."""
@@ -39,4 +41,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    shopping_list_items = db.relationship(...)
+    shopping_list_items = db.relationship('GroceryItem')
+
+shopping_list_table = db.Table('Shopping List',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('item_id', db.Integer, db.ForeignKey('grocery_item.id'))
+)

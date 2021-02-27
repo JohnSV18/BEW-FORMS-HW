@@ -1,0 +1,8 @@
+{% extends 'base.html %}
+<p>Shopping List:</p>
+{% for item in shopping_items_list %}
+    <p>{ item }</p>
+{% endfor %}
+
+
+{% block content %}
