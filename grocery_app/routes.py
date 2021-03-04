@@ -6,9 +6,7 @@ from grocery_app.models import GroceryStore, GroceryItem, User
 # from grocery_app.forms import BookForm, AuthorForm, GenreForm
 from grocery_app.forms import GroceryStoreForm, GroceryItemForm, SignUpForm, LoginForm
 # Import app and db from events_app package so that we can run app
-from grocery_app import app, db
-
-from flask_bcrypt import Bcrypt
+from grocery_app import app, db, bcrypt
 
 
 main = Blueprint("main", __name__)
@@ -34,10 +32,11 @@ def new_store():
     # - create a new GroceryStore object and save it to the database,
         new_store = GroceryStore(
             title=form.title.data,
-            address=form.address.data
+            address=form.address.data,
+            created_by=flask_login.current_user
         )
         db.session.add(new_store)
-        de.session.commit()
+        db.session.commit()
     # - flash a success message, and
     # - redirect the user to the store detail page.
         flash('New Grocery Store was created successfully.')
@@ -59,7 +58,8 @@ def new_item():
             name=form.name.data,
             price=form.price.data,
             category=form.category.data,
-            photo_url=form.photo_url.data
+            photo_url=form.photo_url.data,
+            created_by=flask_login.current_user
         )
         db.session.add(new_item)
         db.session.commit()
@@ -94,7 +94,7 @@ def store_detail(store_id):
         flash('New Store was updated successfully.')
         return redirect(url_for('main.store_detail', store_id = store.id))
     # TODO: Send the form to the template and use it to render the form fields
-    store = GroceryStore.query.get(store_id)
+    # store = GroceryStore.query.get(store_id)
     return render_template('store_detail.html', store=store)
 
 @main.route('/item/<item_id>', methods=['GET', 'POST'])
@@ -124,7 +124,7 @@ def item_detail(item_id):
         return redirect(url_for('main.item_detail', item_id=new_item.id))
 
     # TODO: Send the form to the template and use it to render the form fields
-    item = GroceryItem.query.get(item_id)
+    # item = GroceryItem.query.get(item_id)
     return render_template('item_detail.html', item=item)
 
 @main.route('/add_to_shopping_list/<item_id>', methods=['POST'])
@@ -132,6 +132,7 @@ def add_to_shopping_list(item_id):
     item = GroceryItem.query.get(item_id)
 
     current_user.shopping_list_items.append(item)
+    
 @main.route('/shopping_list')
 @login_required
 def shopping_list():
