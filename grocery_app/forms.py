@@ -3,7 +3,6 @@ from wtforms import StringField, DateField, SelectField, SubmitField, FloatField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Length, URL
 from grocery_app.models import ItemCategory, GroceryStore, GroceryItem, User
-from flask_bcrypt import Bcrypt
 
 
 
